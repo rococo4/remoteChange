@@ -37,7 +37,7 @@ func (s *Service) Login(user model.UserDTOLogin) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error generating user: %w", err)
 	}
-	if !infrastructure.CheckPassword(entity.Password, user.Password) {
+	if !infrastructure.CheckPassword(user.Password, entity.Password) {
 		return "", fmt.Errorf("passwords do not match")
 	}
 	token, err := jwt.GenerateJWT(entity.Username, entity.Role)

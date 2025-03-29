@@ -8,9 +8,9 @@ type TeamCreateDto struct {
 
 type TeamEntity struct {
 	Id          int64  `db:"id"`
-	Name        string `db:"Name"`
-	ClusterName string `db:"ClusterName"`
-	Namespace   string `db:"Namespace"`
+	Name        string `db:"name"`
+	ClusterName string `db:"cluster_name"`
+	Namespace   string `db:"namespace"`
 }
 
 type UpdateTeamDTO struct {

@@ -30,7 +30,7 @@ func (k *KubernetesDeployer) Deploy(entity model.ConfigEntity, toCreate bool) er
 		return fmt.Errorf("YAML не содержит поле 'kind'")
 	}
 
-	metadata, ok := raw["metadata"].(map[interface{}]interface{})
+	metadata, ok := raw["metadata"].(map[string]interface{})
 	if !ok {
 		return fmt.Errorf("YAML не содержит 'metadata'")
 	}
