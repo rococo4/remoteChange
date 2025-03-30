@@ -8,8 +8,9 @@ import (
 	"remoteChange/internal/middleware"
 	"strconv"
 
-	"github.com/gorilla/mux"
 	"remoteChange/internal/model"
+
+	"github.com/gorilla/mux"
 )
 
 type TeamHandler struct {
@@ -37,15 +38,15 @@ func (h *TeamHandler) CreateTeam(w http.ResponseWriter, r *http.Request) {
 
 func (h *TeamHandler) EditUserInTeam(w http.ResponseWriter, r *http.Request) {
 	var request struct {
-		UserID int64  `json:"user_id"`
-		TeamID *int64 `json:"team_id"`
+		Username string `json:"username"`
+		TeamID   *int64 `json:"team_id"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
-	if err := h.service.EditUserInTeam(request.UserID, request.TeamID); err != nil {
+	if err := h.service.EditUserInTeam(request.Username, request.TeamID); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -101,10 +102,27 @@ func (h *TeamHandler) DeleteTeam(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *TeamHandler) GetUserTeam(w http.ResponseWriter, r *http.Request) {
+	username := r.URL.Query().Get("username")
+	if username == "" {
+		http.Error(w, "Username is required", http.StatusBadRequest)
+		return
+	}
+
+	team, err := h.service.GetTeamForUsername(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(team)
+}
+
 func (h *TeamHandler) RegisterTeamRoutes(router *mux.Router) {
 	router.Handle("/teams", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.CreateTeam)))).Methods("POST")
 	router.Handle("/teams/{id}", middleware.AuthMiddleware(http.HandlerFunc(h.GetTeamById))).Methods("GET")
 	router.Handle("/teams", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.EditTeam)))).Methods("PUT")
 	router.Handle("/teams/{id}", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.DeleteTeam)))).Methods("DELETE")
 	router.Handle("/teams/user", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.EditUserInTeam)))).Methods("PATCH")
+	router.Handle("/teams/user/team", middleware.AuthMiddleware(http.HandlerFunc(h.GetUserTeam))).Methods("GET")
 }

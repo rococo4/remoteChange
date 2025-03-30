@@ -18,9 +18,18 @@ func NewService(repo teamRepo) Service {
 
 func (s *Service) CreateTeam(ctx context.Context, team model.TeamCreateDto) error {
 	entity := infrastructure.MapTeamDtoCreateToTeamEntity(team)
-	err := s.repo.SaveTeam(entity)
+	user, err := s.getUserFromCtx(ctx)
+	if err != nil {
+		return fmt.Errorf("error getting user from ctx: %w", err)
+	}
+	id, err := s.repo.SaveTeam(entity)
 	if err != nil {
 		return fmt.Errorf("error saving team: %w", err)
+	}
+	user.TeamId = &id
+	err = s.repo.UpdateUserInTeam(user.Id, user.TeamId)
+	if err != nil {
+		fmt.Errorf("error updating user in team: %w", err)
 	}
 	return nil
 }

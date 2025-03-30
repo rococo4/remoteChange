@@ -2,9 +2,10 @@ package repository
 
 import "remoteChange/internal/model"
 
-func (r *Repo) SaveTeam(team model.TeamEntity) error {
-	_, err := r.Db.Exec("insert into teams (name) values ($1)", team.Name)
-	return err
+func (r *Repo) SaveTeam(team model.TeamEntity) (int64, error) {
+	var id int64
+	err := r.Db.QueryRow("insert into teams (name) values ($1) returning id", team.Name).Scan(&id)
+	return id, err
 }
 
 func (r *Repo) UpdateUserInTeam(userId int64, teamId *int64) error {

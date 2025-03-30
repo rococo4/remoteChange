@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// todo: сделать транзакции
 func (r *Repo) CreateConfig(config model.ConfigEntity, userId int64) (int64, error) {
 	var id int64
 	err := r.Db.QueryRow("insert into configs (team_id, type, content, created_at) values ($1, $2, $3, $4) returning id",
