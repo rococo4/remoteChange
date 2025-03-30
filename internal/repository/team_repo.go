@@ -3,8 +3,7 @@ package repository
 import "remoteChange/internal/model"
 
 func (r *Repo) SaveTeam(team model.TeamEntity) error {
-	_, err := r.Db.Exec("insert into teams (name, cluster_name, namespace) values ($1, $2, $3)",
-		team.Name, team.ClusterName, team.Namespace)
+	_, err := r.Db.Exec("insert into teams (name) values ($1)", team.Name)
 	return err
 }
 
@@ -24,8 +23,8 @@ func (r *Repo) GetTeamById(teamId int64) (model.TeamEntity, error) {
 }
 
 func (r *Repo) EditTeam(team model.TeamEntity) error {
-	_, err := r.Db.Exec("update teams set name=$1, cluster_name=$2, namespace=$3 where id=$4",
-		team.Name, team.ClusterName, team.Namespace, team.Id)
+	_, err := r.Db.Exec("update teams set name=$1 where id=$2",
+		team.Name, team.Id)
 	return err
 }
 

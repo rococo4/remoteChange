@@ -2,8 +2,6 @@ CREATE TABLE teams
 (
     id           SERIAL PRIMARY KEY,
     name         VARCHAR(50)  NOT NULL,
-    cluster_name VARCHAR(100) NOT NULL,
-    namespace    VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE users
@@ -24,7 +22,8 @@ CREATE TABLE configs
     team_id    INTEGER REFERENCES teams (id) ON DELETE CASCADE,
     type       VARCHAR(50) CHECK (type IN ('ConfigMap', 'Secret')),
     content    TEXT                                                NOT NULL,
-    created_at TIMESTAMP DEFAULT now()
+    created_at TIMESTAMP DEFAULT now(),
+    description TEXT DEFAULT 'No description'
 );
 
 CREATE TABLE config_versions

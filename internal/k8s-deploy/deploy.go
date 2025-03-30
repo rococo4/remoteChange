@@ -3,10 +3,11 @@ package k8s_deploy
 import (
 	"context"
 	"fmt"
+	"remoteChange/internal/model"
+
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"remoteChange/internal/model"
 	"sigs.k8s.io/yaml"
 )
 
@@ -49,25 +50,15 @@ func (k *KubernetesDeployer) Deploy(entity model.ConfigEntity, toCreate bool) er
 		return fmt.Errorf("YAML не содержит 'namespace'")
 	}
 
-	isAllowed, err := k.isNamespaceAllowed(entity.TeamId, namespace)
-	if err != nil {
-		return fmt.Errorf("ошибка проверки namespace: %w", err)
-	}
-
-	if !isAllowed {
-		return fmt.Errorf("команде %d запрещено развертывание в namespace %s", entity.TeamId, namespace)
-	}
-
 	entity.Name = name
 	entity.Type = kind
-	err = k.repo.SaveConfig(entity)
+	err := k.repo.SaveConfig(entity)
 	if err != nil {
 		return fmt.Errorf("не удалось установить имя конфигурации: %w", err)
 	}
 
 	switch kind {
 	case "ConfigMap":
-
 		return k.deployConfigMap(entity.Content)
 	case "Secret":
 		return k.deploySecret(entity.Content)
@@ -126,13 +117,4 @@ func (k *KubernetesDeployer) deploySecret(yamlContent string) error {
 		return fmt.Errorf("не удалось развернуть Secret: %w", err)
 	}
 	return nil
-}
-
-// isNamespaceAllowed проверяет, разрешён ли namespace для teamId
-func (k *KubernetesDeployer) isNamespaceAllowed(teamId int64, namespace string) (bool, error) {
-	team, err := k.repo.GetTeamById(teamId)
-	if err != nil {
-		return false, err
-	}
-	return team.Namespace == namespace, nil
 }

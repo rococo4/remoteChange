@@ -1,6 +1,9 @@
 package infrastructure
 
-import "remoteChange/internal/model"
+import (
+	"remoteChange/internal/model"
+	"time"
+)
 
 func MapUserDtoRegisterToUserEntity(dto model.UserDTORegister) model.UserEntity {
 	return model.UserEntity{
@@ -15,36 +18,34 @@ func MapUserDtoRegisterToUserEntity(dto model.UserDTORegister) model.UserEntity 
 
 func MapTeamDtoCreateToTeamEntity(dto model.TeamCreateDto) model.TeamEntity {
 	return model.TeamEntity{
-		Name:        dto.Name,
-		ClusterName: dto.ClusterName,
-		Namespace:   dto.Namespace,
+		Name: dto.Name,
 	}
 }
 
 func MapTeamEntityToResponseDto(entity model.TeamEntity) model.ResponseTeamDTO {
 	return model.ResponseTeamDTO{
-		Id:          entity.Id,
-		Name:        entity.Name,
-		ClusterName: entity.ClusterName,
-		Namespace:   entity.Namespace,
+		Id:   entity.Id,
+		Name: entity.Name,
 	}
 }
 
 func MapCreateConfigDtoToConfigEntity(dto model.CreateConfigDTO) model.ConfigEntity {
 	return model.ConfigEntity{
-		TeamId:    dto.TeamId,
-		Content:   dto.Content,
-		CreatedAt: dto.CreatedAt,
+		TeamId:      dto.TeamId,
+		Content:     dto.Content,
+		CreatedAt:   time.Now(),
+		Description: dto.Description,
 	}
 }
 
 func MapConfigEntityToConfigResponse(entity model.ConfigEntity) model.ConfigResponse {
 	return model.ConfigResponse{
-		Id:        entity.Id,
-		Name:      entity.Name,
-		TeamId:    entity.TeamId,
-		Type:      entity.Type,
-		Content:   entity.Content,
-		CreatedAt: entity.CreatedAt,
+		Id:          entity.Id,
+		Name:        entity.Name,
+		TeamId:      entity.TeamId,
+		Type:        entity.Type,
+		Content:     entity.Content,
+		CreatedAt:   entity.CreatedAt,
+		Description: entity.Description,
 	}
 }

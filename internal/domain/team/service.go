@@ -3,6 +3,7 @@ package team
 import (
 	"context"
 	"fmt"
+	auth "remoteChange/internal/domain/jwt"
 	"remoteChange/internal/infrastructure"
 	"remoteChange/internal/model"
 )
@@ -24,10 +25,14 @@ func (s *Service) CreateTeam(ctx context.Context, team model.TeamCreateDto) erro
 	return nil
 }
 
-func (s *Service) EditUserInTeam(userId int64, teamId *int64) error {
-	err := s.repo.UpdateUserInTeam(userId, teamId)
+func (s *Service) EditUserInTeam(username string, teamId *int64) error {
+	userE, err := s.repo.GetUserByUsername(username)
 	if err != nil {
-		return fmt.Errorf("error adding user to team: %w", err)
+		return fmt.Errorf("error getting user: %w", err)
+	}
+	err = s.repo.UpdateUserInTeam(userE.Id, teamId)
+	if err != nil {
+		return fmt.Errorf("error edditing user to team: %w", err)
 	}
 	return nil
 }
@@ -49,12 +54,6 @@ func (s *Service) EditTeam(team model.UpdateTeamDTO) error {
 	if team.Name != nil {
 		entity.Name = *team.Name
 	}
-	if team.ClusterName != nil {
-		entity.ClusterName = *team.ClusterName
-	}
-	if team.Namespace != nil {
-		entity.Namespace = *team.Namespace
-	}
 
 	err = s.repo.EditTeam(entity)
 	if err != nil {
@@ -69,4 +68,32 @@ func (s *Service) DeleteTeam(teamId int64) error {
 		return fmt.Errorf("error deleting team: %w", err)
 	}
 	return nil
+}
+
+func (s *Service) GetTeamForUsername(ctx context.Context) (*model.ResponseTeamDTO, error) {
+	user, err := s.getUserFromCtx(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("error getting user from ctx: %w", err)
+	}
+	if user.TeamId == nil {
+		return nil, nil
+	}
+	entity, err := s.repo.GetTeamById(*user.TeamId)
+	if err != nil {
+		return nil, fmt.Errorf("error getting team: %w", err)
+	}
+	dto := infrastructure.MapTeamEntityToResponseDto(entity)
+	return &dto, nil
+}
+
+func (s *Service) getUserFromCtx(ctx context.Context) (*model.UserEntity, error) {
+	claims, ok := ctx.Value("user").(*auth.Claims)
+	if !ok {
+		return nil, fmt.Errorf("error getting claims")
+	}
+	user, err := s.repo.GetUserByUsername(claims.Username)
+	if err != nil {
+		return nil, fmt.Errorf("error getting user by username %w", err)
+	}
+	return &user, nil
 }

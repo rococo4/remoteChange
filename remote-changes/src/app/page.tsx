@@ -144,18 +144,17 @@ export default function Page() {
         )}
 
         {activeTab === "Admin" && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-2xl font-bold mb-4">Admin Panel</h2>
+          <div className="bg-gradient-to-br from-white to-gray-100 p-8 rounded-lg shadow-lg transition-all duration-300">
+            <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">Admin Panel</h2>
             {adminTeam ? (
               <>
-                {/* Display team users */}
-                <h3 className="text-xl font-semibold mb-2">Team: {adminTeam.name}</h3>
-                <ul className="mb-4">
+                <h3 className="text-2xl font-semibold mb-4">Team: {adminTeam.name}</h3>
+                <ul className="mb-6 space-y-2">
                   {adminTeam.users.map((username, index) => (
-                    <li key={index} className="flex justify-between items-center py-1">
-                      <span>{username}</span>
+                    <li key={index} className="flex justify-between items-center p-2 bg-white rounded shadow hover:shadow-md transition-shadow">
+                      <span className="font-medium">{username}</span>
                       <button
-                        className="text-red-600 hover:text-red-800 font-medium"
+                        className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
                         onClick={() =>
                           setAdminTeam({
                             ...adminTeam,
@@ -168,17 +167,16 @@ export default function Page() {
                     </li>
                   ))}
                 </ul>
-                {/* Add new user form */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <input
                     type="text"
                     placeholder="Username"
                     value={newUserName}
                     onChange={(e) => setNewUserName(e.target.value)}
-                    className="p-2 border rounded"
+                    className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                     onClick={() => {
                       if (newUserName.trim() === "") return;
                       setAdminTeam({ ...adminTeam, users: [...adminTeam.users, newUserName.trim()] });
@@ -190,17 +188,16 @@ export default function Page() {
                 </div>
               </>
             ) : (
-              // If no team exists then display create team form
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 <input
                   type="text"
                   placeholder="Team Name"
                   value={newTeamName}
                   onChange={(e) => setNewTeamName(e.target.value)}
-                  className="p-2 border rounded"
+                  className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                   onClick={() => {
                     if (newTeamName.trim() === "") return;
                     setAdminTeam({ name: newTeamName.trim(), users: [] });
