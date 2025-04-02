@@ -42,40 +42,50 @@ func (r *Repo) SaveConfig(config model.ConfigEntity) error {
 	return err
 }
 
-func (r *Repo) UpdateConfig(config model.ConfigEntity, userId int64) (int64, error) {
-	var id int64
+func (r *Repo) UpdateConfig(config model.ConfigEntity, userId int64, configVersionId int64) (int64, error) {
+	var newActualConfigId int64
+	// вставляем в таблицу configs новый конфиг
 	err := r.Db.QueryRow("insert into configs (team_id, type, content, created_at, name) values ($1, $2, $3, $4, $5) returning id",
-		config.TeamId, config.Type, config.Content, config.CreatedAt, config.Name).Scan(&id)
+		config.TeamId, config.Type, config.Content, config.CreatedAt, config.Name).Scan(&newActualConfigId)
 	if err != nil {
 		return 0, err
 	}
-	_, err = r.Db.Exec("insert into config_versions (actual_config_id) values ($1)", id)
+	// получаем id(в таблице configs) старого конфига из таблицы config_versions по id
+	var oldActualConfigId int64
+	err = r.Db.QueryRow("select actual_config_id from config_versions where id=$1", configVersionId).Scan(&oldActualConfigId)
+	if err != nil {
+		return 0, err
+	}
+	// обновляем actual_config_id в таблице config_versions на новый конфиг id
+	_, err = r.Db.Exec("update config_versions set actual_config_id=$1 where id=$2", newActualConfigId, configVersionId)
 	if err != nil {
 		return 0, err
 	}
 	var oldId int64
-	err = r.Db.QueryRow("select id from config_changes where new_config=$1", config.Id).Scan(&oldId)
+	// получаем id старого конфига из таблицы config_changes
+	err = r.Db.QueryRow("select id from config_changes where new_config=$1", oldActualConfigId).Scan(&oldId)
 	if err != nil {
 		return 0, err
 	}
+	// добавляем запись в таблицу config_changes об изменении конфига
 	_, err = r.Db.Exec("insert into config_changes (new_config, old_config, user_id, action, action_at, team_id) values ($1, $2, $3, $4, $5, $6)",
-		config.Id, oldId, userId, "update", time.Now(), config.TeamId)
+		newActualConfigId, oldId, userId, "update", time.Now(), config.TeamId)
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+	return newActualConfigId, nil
 }
 
-func (r *Repo) GetIdOldConfig(configId int64) (int64, error) {
-	var oldId int64
+func (r *Repo) GetIdOldConfig(configId int64) (*int64, error) {
+	var oldId *int64
 	err := r.Db.QueryRow("select old_config from config_changes where new_config=$1", configId).Scan(&oldId)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	var oldConfigId int64
+	var oldConfigId *int64
 	err = r.Db.QueryRow("select new_config from config_changes where id=$1", oldId).Scan(&oldConfigId)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	return oldConfigId, nil
 }
@@ -83,7 +93,7 @@ func (r *Repo) GetIdOldConfig(configId int64) (int64, error) {
 func (r *Repo) Rollback(configId int64, userId int64) error {
 	var oldId, teamId int64
 	// получаем id старого конфига для того, который нужно rollback. Id из таблицы config_changes
-	err := r.Db.QueryRow("select old_config, team_id from config_changes where new_config=$1 and action=$2", configId, "create").Scan(&oldId, &teamId)
+	err := r.Db.QueryRow("select old_config, team_id from config_changes where new_config=$1", configId).Scan(&oldId, &teamId)
 	if err != nil {
 		return err
 	}
@@ -94,7 +104,7 @@ func (r *Repo) Rollback(configId int64, userId int64) error {
 		return err
 	}
 	// обновляем actual_config_id в таблице config_versions
-	_, err = r.Db.Exec("update config_versions set actual_config_id=$1 where id=$2", oldConfigId, configId)
+	_, err = r.Db.Exec("update config_versions set actual_config_id=$1 where actual_config_id=$2", oldConfigId, configId)
 	if err != nil {
 		return err
 	}
@@ -102,4 +112,30 @@ func (r *Repo) Rollback(configId int64, userId int64) error {
 	_, err = r.Db.Exec("insert into config_changes (new_config, old_config, user_id, action, action_at, team_id) values ($1, $2, $3, $4, $5, $6)",
 		oldConfigId, configId, userId, "rollback", time.Now(), teamId)
 	return err
+}
+
+// получение актуального id в таблице configs по актуальному id конфига
+func (r *Repo) GetIdByConfigVersionId(configVersionId int64) (int64, error) {
+	var id int64
+	err := r.Db.QueryRow("select actual_config_id from config_versions where id=$1", configVersionId).Scan(&id)
+	return id, err
+}
+
+func (r *Repo) GetOldConfigId(newConfigId int64) (*int64, error) {
+	var oldConfigId *int64
+	err := r.Db.Get(&oldConfigId, "select old_config from config_changes where new_config=$1", newConfigId)
+	return oldConfigId, err
+}
+
+func (r *Repo) GetConfigChanges(configId int64) (model.ConfigChangesEntity, error) {
+	var configVersions model.ConfigChangesEntity
+	err := r.Db.Get(&configVersions, "select * from config_changes where id=$1", configId)
+	return configVersions, err
+}
+
+// получение актульного id в таблице config_versions по actual_config_id конфига
+func (r *Repo) GetActualConfigIdByConfigId(id int64) (int64, error) {
+	var actualId int64
+	err := r.Db.Get(&actualId, "select id from config_versions where actual_config_id=$1", id)
+	return actualId, err
 }

@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	"remoteChange/internal/domain/config"
 	"remoteChange/internal/middleware"
 	"remoteChange/internal/model"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type CfgHandler struct {
@@ -24,6 +25,7 @@ func (h *CfgHandler) RegisterRoutes(r *mux.Router) {
 	r.Handle("/configs/team/{teamId}", middleware.AuthMiddleware(http.HandlerFunc(h.GetConfigByTeam))).Methods("GET")
 	r.Handle("/configs/{id}/rollback", middleware.AuthMiddleware(http.HandlerFunc(h.Rollback))).Methods("POST")
 	r.Handle("/configs/{id}", middleware.AuthMiddleware(http.HandlerFunc(h.GetConfigById))).Methods("GET")
+	r.Handle("/configs/{id}/changes", middleware.AuthMiddleware(http.HandlerFunc(h.GetConfigChangesForId))).Methods("GET")
 }
 
 func (h *CfgHandler) CreateConfig(w http.ResponseWriter, r *http.Request) {
@@ -85,12 +87,26 @@ func (h *CfgHandler) GetConfigById(w http.ResponseWriter, r *http.Request) {
 		h.respondWithError(w, http.StatusBadRequest, "invalid config ID")
 		return
 	}
-	config, err := h.service.GetConfigById(configId)
+	config, err := h.service.GetActualConfigById(configId)
 	if err != nil {
 		h.respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	h.respondWithJSON(w, http.StatusOK, config)
+}
+
+func (h *CfgHandler) GetConfigChangesForId(w http.ResponseWriter, r *http.Request) {
+	configId, err := strconv.ParseInt(mux.Vars(r)["id"], 10, 64)
+	if err != nil {
+		h.respondWithError(w, http.StatusBadRequest, "invalid config ID")
+		return
+	}
+	changes, err := h.service.GetConfigChangesForId(configId)
+	if err != nil {
+		h.respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	h.respondWithJSON(w, http.StatusOK, changes)
 }
 
 func (h *CfgHandler) respondWithError(w http.ResponseWriter, code int, message string) {

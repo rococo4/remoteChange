@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"remoteChange/internal/domain/user"
 
-	"github.com/gorilla/mux"
 	"remoteChange/internal/model"
+
+	"github.com/gorilla/mux"
 )
 
 type UserHandler struct {

@@ -9,4 +9,5 @@ type teamRepo interface {
 	EditTeam(team model.TeamEntity) error
 	DeleteTeam(teamId int64) error
 	GetUserByUsername(username string) (model.UserEntity, error)
+	GetAllUsersForTeam(teamId int64) ([]model.UserEntity, error)
 }

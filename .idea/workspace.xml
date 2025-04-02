@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1b0a84ab-2d51-4d1c-a09b-2f49458ce2c5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/remoteChange.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/remoteChange.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/remoteChanges.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/01_create_tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/01_create_tables.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/api/cfg_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/cfg_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/api/team_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/team_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/api/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/user_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/config/contract.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/config/contract.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/config/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/config/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/team/contract.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/team/contract.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/team/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/team/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/infrastructure/mapers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/infrastructure/mapers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/k8s-deploy/deploy.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/k8s-deploy/deploy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/model/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/model/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/config_repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/config_repo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/team_repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/team_repo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user_repo.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user_repo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/remote-changes/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/remote-changes/src/app/page.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.23.7.windows-amd64" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "rococo4"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/rococo4/remoteChange.git",
+    "accountId": "664686ef-c56b-4750-a5aa-95266e87a831"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2v940pb0eUDnTzVDRBSvlJRrmXv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Go Build.go build remoteChange.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/сенька/Desktop/фронт/remoteChange",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="go build remoteChange" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="remoteChange" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="remoteChange" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build remoteChange" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-5df93f7ad4aa-df9ad98b711f-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-242.23339.24" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-GO-242.23339.24" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/domain/config/service.go</url>
+          <line>40</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

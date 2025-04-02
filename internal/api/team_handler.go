@@ -103,11 +103,6 @@ func (h *TeamHandler) DeleteTeam(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TeamHandler) GetUserTeam(w http.ResponseWriter, r *http.Request) {
-	username := r.URL.Query().Get("username")
-	if username == "" {
-		http.Error(w, "Username is required", http.StatusBadRequest)
-		return
-	}
 
 	team, err := h.service.GetTeamForUsername(r.Context())
 	if err != nil {
@@ -118,6 +113,32 @@ func (h *TeamHandler) GetUserTeam(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(team)
 }
 
+func (h *TeamHandler) GetUserRole(w http.ResponseWriter, r *http.Request) {
+	role, err := h.service.GetUserRole(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(role)
+}
+
+func (h *TeamHandler) GetUsersForTeam(w http.ResponseWriter, r *http.Request) {
+	teamID, err := strconv.ParseInt(mux.Vars(r)["teamId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid team ID", http.StatusBadRequest)
+		return
+	}
+
+	users, err := h.service.GetAllUsersForTeam(teamID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(users)
+}
+
 func (h *TeamHandler) RegisterTeamRoutes(router *mux.Router) {
 	router.Handle("/teams", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.CreateTeam)))).Methods("POST")
 	router.Handle("/teams/{id}", middleware.AuthMiddleware(http.HandlerFunc(h.GetTeamById))).Methods("GET")
@@ -125,4 +146,6 @@ func (h *TeamHandler) RegisterTeamRoutes(router *mux.Router) {
 	router.Handle("/teams/{id}", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.DeleteTeam)))).Methods("DELETE")
 	router.Handle("/teams/user", middleware.AuthMiddleware(middleware.AdminMiddleware(http.HandlerFunc(h.EditUserInTeam)))).Methods("PATCH")
 	router.Handle("/teams/user/team", middleware.AuthMiddleware(http.HandlerFunc(h.GetUserTeam))).Methods("GET")
+	router.Handle("/teams/user/role", middleware.AuthMiddleware(http.HandlerFunc(h.GetUserRole))).Methods("GET")
+	router.Handle("/teams/{teamId}/users", middleware.AuthMiddleware(http.HandlerFunc(h.GetUsersForTeam))).Methods("GET")
 }

@@ -2,12 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 	"log"
 	"net/http"
 	"remoteChange/internal/api"
@@ -16,6 +10,15 @@ import (
 	"remoteChange/internal/domain/user"
 	k8s_deploy "remoteChange/internal/k8s-deploy"
 	"remoteChange/internal/repository"
+
+	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
+
+	"github.com/rs/cors"
 )
 
 func Run() {
@@ -47,7 +50,18 @@ func Run() {
 	teamHandler.RegisterTeamRoutes(router)
 	userHandler.RegisterUserRoutes(router)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fs := http.FileServer(http.Dir("frontend"))
+	http.Handle("/", fs)
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+	handler := c.Handler(router)
+
+	log.Fatal(http.ListenAndServe(":8080", handler))
 
 }
 func getKubeClient() (*kubernetes.Clientset, error) {

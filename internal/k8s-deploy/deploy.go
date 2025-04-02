@@ -54,7 +54,7 @@ func (k *KubernetesDeployer) Deploy(entity model.ConfigEntity, toCreate bool) er
 	entity.Type = kind
 	err := k.repo.SaveConfig(entity)
 	if err != nil {
-		return fmt.Errorf("не удалось установить имя конфигурации: %w", err)
+		return fmt.Errorf("не удалось сохранить	: %w", err)
 	}
 
 	switch kind {

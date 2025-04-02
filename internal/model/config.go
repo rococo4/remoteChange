@@ -31,3 +31,20 @@ type ConfigResponse struct {
 	CreatedAt   time.Time `json:"created_at"`
 	Description string    `json:"description"`
 }
+
+type ConfigVersionResponse struct {
+	Id       int64     `json:"id"`
+	Username string    `json:"username"`
+	Action   string    `json:"action"`
+	Date     time.Time `json:"date"`
+}
+
+type ConfigChangesEntity struct {
+	Id        int64     `db:"id"`
+	NewConfig int64     `db:"new_config"`
+	OldConfig *int64    `db:"old_config"`
+	UserId    int64     `db:"user_id"`
+	TeamId    int64     `db:"team_id"`
+	Action    string    `db:"action"`
+	ActionAt  time.Time `db:"action_at"`
+}

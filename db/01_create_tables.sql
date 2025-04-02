@@ -20,7 +20,7 @@ CREATE TABLE configs
     id         SERIAL PRIMARY KEY,
     name       VARCHAR,
     team_id    INTEGER REFERENCES teams (id) ON DELETE CASCADE,
-    type       VARCHAR(50) CHECK (type IN ('ConfigMap', 'Secret')),
+    type       VARCHAR(50),
     content    TEXT                                                NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     description TEXT DEFAULT 'No description'
@@ -39,6 +39,6 @@ CREATE TABLE config_changes
     old_config INTEGER                                              REFERENCES config_changes (id) ON DELETE SET NULL,
     user_id    INTEGER REFERENCES users (id) ON DELETE CASCADE,
     team_id    INTEGER REFERENCES teams (id) ON DELETE CASCADE,
-    action     VARCHAR(50) CHECK (action IN ('create', 'rollback')) NOT NULL,
+    action     VARCHAR(50),
     action_at  TIMESTAMP DEFAULT now()
 );

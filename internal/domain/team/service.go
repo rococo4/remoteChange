@@ -95,6 +95,25 @@ func (s *Service) GetTeamForUsername(ctx context.Context) (*model.ResponseTeamDT
 	return &dto, nil
 }
 
+func (s *Service) GetUserRole(ctx context.Context) (string, error) {
+	user, err := s.getUserFromCtx(ctx)
+	if err != nil {
+		return "", fmt.Errorf("error getting user from ctx: %w", err)
+	}
+	if user == nil {
+		return "", fmt.Errorf("user not found in context")
+	}
+	return user.Role, nil
+}
+
+func (s *Service) GetAllUsersForTeam(teamId int64) ([]model.UserEntity, error) {
+	users, err := s.repo.GetAllUsersForTeam(teamId)
+	if err != nil {
+		return nil, fmt.Errorf("error getting users for team: %w", err)
+	}
+	return users, nil
+}
+
 func (s *Service) getUserFromCtx(ctx context.Context) (*model.UserEntity, error) {
 	claims, ok := ctx.Value("user").(*auth.Claims)
 	if !ok {

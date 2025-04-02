@@ -33,3 +33,9 @@ func (r *Repo) DeleteTeam(teamId int64) error {
 	_, err := r.Db.Exec("delete from teams where id=$1", teamId)
 	return err
 }
+
+func (r *Repo) GetAllUsersForTeam(teamId int64) ([]model.UserEntity, error) {
+	var users []model.UserEntity
+	err := r.Db.Select(&users, "select * from users where team_id=$1", teamId)
+	return users, err
+}

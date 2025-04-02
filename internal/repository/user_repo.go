@@ -14,3 +14,8 @@ func (r *Repo) GetUserByUsername(username string) (model.UserEntity, error) {
 	err := r.Db.Get(&user, "select * from users where username=$1", username)
 	return user, err
 }
+func (r *Repo) GetUserById(id int64) (model.UserEntity, error) {
+	var user model.UserEntity
+	err := r.Db.Get(&user, "select * from users where id=$1", id)
+	return user, err
+}

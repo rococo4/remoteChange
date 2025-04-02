@@ -1,7 +1,10 @@
 package main
 
-import "remoteChange/internal"
+import (
+	"remoteChange/internal"
+)
 
 func main() {
+
 	internal.Run()
 }
